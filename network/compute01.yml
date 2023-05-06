@@ -16,8 +16,6 @@ network:
             transmit-hash-policy: layer3+4
             mode: active-backup
             primary: eno1
-          addresses:
-          - 10.3.101.21/24
       bond1: # Provider and tenant
           interfaces:
           - eno2

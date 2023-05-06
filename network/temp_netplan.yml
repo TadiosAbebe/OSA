@@ -1,0 +1,22 @@
+network:
+  ethernets:
+    eno1:
+      dhcp4: true
+    eno2:
+      dhcp4: true
+    eno3:
+      dhcp4: true
+    eno4:
+      dhcp4: true
+  vlans:
+    eno1.10:
+      id: 10
+      link: eno1
+      addresses:
+      - 172.29.236.x/22
+      gateway4: 172.29.236.1
+      nameservers:
+        addresses:
+          8.8.8.8
+        search: []
+  version: 2
