@@ -14,7 +14,7 @@ network:
             lacp-rate: fast
             mii-monitor-interval: 100
             transmit-hash-policy: layer3+4
-            mode: 802.3ad
+            mode: active-backup
             primary: eno1
           addresses:
           - 10.3.101.11/24
@@ -27,7 +27,7 @@ network:
             lacp-rate: fast
             mii-monitor-interval: 100
             transmit-hash-policy: layer3+4
-            mode: 802.3ad
+            mode: active-backup
             primary: eno2
   vlans:
     bond0.10: # Management VLAN
