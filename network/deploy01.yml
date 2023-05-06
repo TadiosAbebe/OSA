@@ -1,0 +1,73 @@
+network:
+  ethernets:
+    eno1: {}
+    eno2: {}
+    eno3: {}
+    eno4: {}
+  bonds:
+      bond0: # Management and storage
+          interfaces:
+          - eno1
+          - eno3
+          mtu: 9000
+          parameters:
+            lacp-rate: fast
+            mii-monitor-interval: 100
+            transmit-hash-policy: layer3+4
+            mode: active-backup
+            primary: eno1
+          addresses:
+          - 10.3.101.10/24
+      bond1: # Provider and tenant
+          interfaces:
+          - eno2
+          - eno4
+          mtu: 9000
+          parameters:
+            lacp-rate: fast
+            mii-monitor-interval: 100
+            transmit-hash-policy: layer3+4
+            mode: active-backup
+            primary: eno2
+  vlans:
+    bond0.10: # Management VLAN
+      id: 10
+      link: bond0
+    bond0.20: # Openstack Storage and CEPH public network VLAN
+      id: 20
+      link: bond0
+    bond1.30: # Tunnel (VXLAN) Network
+      id: 30
+      link: bond1
+  bridges:
+    br-mgmt: # Container/Host management bridge
+      addresses:
+      - 172.29.236.10/22
+      interfaces: 
+      - bond0.10
+      mtu: 9000
+      gateway4: 172.29.236.1
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        - 8.8.4.4
+        search:
+        - sys.zergaw.com
+    br-storage: # Storage bridge
+      addresses:
+      - 172.29.244.10/22
+      interfaces:
+      - bond0.20
+      mtu: 9000
+      openvswitch: {}
+    br-vxlan: # Networking VXLAN (tunnel/overlay) bridge
+      addresses:
+      - 172.29.240.10/22
+      interfaces:
+      - bond1.30
+      mtu: 9000
+    br-vlan: # Networking provider
+      interfaces: 
+      - bond1
+      mtu: 9000
+  version: 2
