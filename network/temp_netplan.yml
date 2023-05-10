@@ -17,6 +17,6 @@ network:
       gateway4: 172.29.236.1
       nameservers:
         addresses:
-          8.8.8.8
+        - 8.8.8.8
         search: []
   version: 2

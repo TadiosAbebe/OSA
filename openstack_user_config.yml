@@ -100,6 +100,8 @@ shared-infra_hosts:
   node03:
     ip: 172.29.236.31
 
+# 
+
 # repository (apt cache, python packages, etc)
 repo-infra_hosts:
   node01:
@@ -147,34 +149,17 @@ storage-infra_hosts:
 # They could instead be applied as global settings in
 # user_variables, but are left here to illustrate that
 # each container could have different storage targets.
-image_hosts:
-  node01:
-    ip: 172.29.236.11
-    container_vars:
-      limit_container_types: glance
-      glance_remote_client:
-        - what: "172.29.244.15:/images"
-          where: "/var/lib/glance/images"
-          type: "nfs"
-          options: "_netdev,auto"
-  node02:
-    ip: 172.29.236.21
-    container_vars:
-      limit_container_types: glance
-      glance_remote_client:
-        - what: "172.29.244.15:/images"
-          where: "/var/lib/glance/images"
-          type: "nfs"
-          options: "_netdev,auto"
-  node03:
-    ip: 172.29.236.31
-    container_vars:
-      limit_container_types: glance
-      glance_remote_client:
-        - what: "172.29.244.15:/images"
-          where: "/var/lib/glance/images"
-          type: "nfs"
-          options: "_netdev,auto"
+
+# image_hosts:
+#   node03:
+#     ip: 172.29.236.31
+#     container_vars:
+#       limit_container_types: glance
+#       glance_remote_client:
+#         - what: "172.29.244.15:/images"
+#           where: "/var/lib/glance/images"
+#           type: "nfs"
+#           options: "_netdev,auto"
 
 # nova api, conductor, etc services
 compute-infra_hosts:
@@ -255,42 +240,12 @@ metering-compute_hosts:
 # user_variables, but are left here to illustrate that
 # each container could have different storage targets.
 storage_hosts:
-  node01:
-    ip: 172.29.236.11
-    container_vars:
-      cinder_backends:
-        limit_container_types: cinder_volume
-        nfs_volume:
-          volume_backend_name: NFS_VOLUME1
-          volume_driver: cinder.volume.drivers.nfs.NfsDriver
-          nfs_mount_options: "rsize=65535,wsize=65535,timeo=1200,actimeo=120"
-          nfs_shares_config: /etc/cinder/nfs_shares
-          shares:
-            - ip: "172.29.244.31"
-              share: "/vol/cinder"
-  node02:
-    ip: 172.29.236.21
-    container_vars:
-      cinder_backends:
-        limit_container_types: cinder_volume
-        nfs_volume:
-          volume_backend_name: NFS_VOLUME1
-          volume_driver: cinder.volume.drivers.nfs.NfsDriver
-          nfs_mount_options: "rsize=65535,wsize=65535,timeo=1200,actimeo=120"
-          nfs_shares_config: /etc/cinder/nfs_shares
-          shares:
-            - ip: "172.29.244.31"
-              share: "/vol/cinder"
   node03:
     ip: 172.29.236.31
     container_vars:
       cinder_backends:
         limit_container_types: cinder_volume
-        nfs_volume:
-          volume_backend_name: NFS_VOLUME1
-          volume_driver: cinder.volume.drivers.nfs.NfsDriver
-          nfs_mount_options: "rsize=65535,wsize=65535,timeo=1200,actimeo=120"
-          nfs_shares_config: /etc/cinder/nfs_shares
-          shares:
-            - ip: "172.29.244.31"
-              share: "/vol/cinder"
+        lvm:
+          volume_group: cinder-volumes
+          volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
+          volume_backend_name: LVM_iSCSI
