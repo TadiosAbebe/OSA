@@ -3,4 +3,8 @@ debug: false
 install_method: source
 glance_default_store: file
 nova_virt_type: kvm
-haproxy_use_keepalived: False
+
+haproxy_keepalived_external_vip_cidr: "{{external_lb_vip_address}}/24"
+haproxy_keepalived_internal_vip_cidr: "{{internal_lb_vip_address}}/22"
+haproxy_keepalived_external_interface: bond0
+haproxy_keepalived_internal_interface: br-mgmt

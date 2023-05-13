@@ -157,7 +157,7 @@ network_hosts:
   compute01:
     ip: 172.29.236.21
   storage01:
-data    ip: 172.29.236.31
+    ip: 172.29.236.31
 
 # ceilometer (telemetry data collection)
 metering-infra_hosts:
