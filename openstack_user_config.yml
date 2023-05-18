@@ -196,7 +196,7 @@ metering-compute_hosts:
   compute01:
     ip: 172.29.236.21
 
-# cinder volume hosts (NFS-backed)
+# cinder volume hosts (LVM-backed)
 storage_hosts:
   storage01:
     ip: 172.29.236.31
@@ -207,3 +207,4 @@ storage_hosts:
           volume_group: cinder-volumes
           volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
           volume_backend_name: LVM_iSCSI
+          iscsi_ip_address: "{{ cinder_storage_address }}"
