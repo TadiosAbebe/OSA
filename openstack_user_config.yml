@@ -208,3 +208,9 @@ storage_hosts:
           volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
           volume_backend_name: LVM_iSCSI
           iscsi_ip_address: "{{ cinder_storage_address }}"
+
+# logging host
+
+log_hosts:
+  storage01:
+    ip: 172.29.236.31

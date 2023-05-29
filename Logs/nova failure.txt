@@ -1,0 +1,61 @@
+
+
+
+
+
+
+
+
+
+compute01 -> infra01_nova_api_container-2bf34cd4(172.29.239.49)
+FAILED! => 
+{
+"attempts": 8, 
+"changed": false, 
+"cmd": ["/openstack/venvs/nova-26.1.0/bin/nova-status", "upgrade", "check"], 
+"delta": "0:00:02.308924", 
+"end": "2023-05-26 09:07:22.608610", 
+"failed_when_result": true, 
+"msg": "non-zero return code", 
+"rc": 2, 
+"start": "2023-05-26 09:07:20.299686", 
+"stderr": "Modules with known eventlet monkey patching issues were imported prior to eventlet monkey patching: urllib3. This warning can usually be ignored if the caller is only importing and not executing nova code.", 
+"stderr_lines": ["Modules with known eventlet monkey patching issues were imported prior to eventlet monkey patching: urllib3. This warning can usually be ignored if the caller is only importing and not executing nova code."]
+
+Upgrade Check Results
+Check: Cells v2
+Result: Success
+Details: No host mappings or compute nodes were found. Remember to |\n|   run command 'nova-manage cell_v2 discover_hosts' when new
+compute hosts are deployed.
+Check: Placement API
+Result: Failur
+Details: Placement API endpoint not found.
+Check: Cinder API
+Result: Success
+Details: None
+Check: Policy File JSON to YAML Migration
+Result: Success
+Details: None
+Check: Older than N-1 computes
+Result: Success
+Details: None
+Check: hw_machine_type unset
+Result: Success
+Details: None
+Upgrade Check Results
+Check: Cells v2
+Result: Success
+Details: No host mappings or compute nodes were found. Remember to |", "|   run command 'nova-manage cell_v2 discover_hosts' when new
+compute hosts are deployed.
+Check: Placement API
+Result: Failure
+Details: Placement API endpoint not found.
+Check: Cinder API
+Result: Success
+Details: None
+Check: Policy File JSON to YAML Migration
+Result: Success
+Details: None
+Check: hw_machine_type unset
+Result: Success
+Details: None
