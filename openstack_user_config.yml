@@ -31,11 +31,11 @@ global_overrides:
         container_type: "veth"
         container_interface: "eth10"
         ip_from_q: "tunnel"
-        type: "vxlan"
+        type: "geneve"
         range: "1:1000"
-        net_name: "vxlan"
+        net_name: "geneve"
         group_binds:
-          - neutron_linuxbridge_agent
+          - neutron_ovn_controller
     - network:
         container_bridge: "br-vlan"
         container_type: "veth"
@@ -43,9 +43,10 @@ global_overrides:
         host_bind_override: "bond1"
         type: "vlan"
         range: "101:200,301:400"
-        net_name: "physnet1"
+        net_name: "vlan"
+        network_interface: "br-vlan"
         group_binds:
-          - neutron_linuxbridge_agent
+          - neutron_ovn_controller
     - network:
         container_bridge: "br-storage"
         container_type: "veth"
