@@ -44,7 +44,6 @@ global_overrides:
         type: "vlan"
         range: "101:200,301:400"
         net_name: "vlan"
-        network_interface: "br-vlan"
         group_binds:
           - neutron_ovn_controller
     - network:
