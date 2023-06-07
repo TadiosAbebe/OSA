@@ -48,6 +48,7 @@ global_overrides:
           - neutron_ovn_controller
     - network:
         container_bridge: "br-storage"
+        container_bridge_type: "openvswitch"
         container_type: "veth"
         container_interface: "eth2"
         ip_from_q: "storage"
