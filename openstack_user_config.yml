@@ -35,6 +35,7 @@ global_overrides:
         net_name: "geneve"
         group_binds:
           - neutron_ovn_controller
+        is_container_address: true
     - network:
         container_bridge: "br-vlan"
         container_type: "veth"
@@ -57,6 +58,7 @@ global_overrides:
           - cinder_api
           - cinder_volume
           - nova_compute
+        is_container_address: true
 
 ###
 ### Infrastructure
