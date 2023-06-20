@@ -37,13 +37,12 @@ global_overrides:
           - neutron_ovn_controller
         is_container_address: true
     - network:
-        container_bridge: "br-vlan"
+        container_bridge: "br-provider"
         container_type: "veth"
-        container_interface: "eth11"
-        host_bind_override: "bond1"
         type: "vlan"
         range: "101:200,301:400"
         net_name: "vlan"
+        network_interface: "br-vlan"
         group_binds:
           - neutron_ovn_controller
     - network:
