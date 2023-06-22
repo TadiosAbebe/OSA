@@ -31,3 +31,14 @@ $ git config --system --unset credential.helper
 - Pull changes from remote repo
 - Make chnages and commit
 - Push to remote
+
+
+ 773  git clone https://github.com/TadiosAbebe/OSA.git
+  774  cd OSA/etc/openstack_deploy/
+  775  git checkout network_experiment
+  776  ls
+  777  nano openstack_user_config.yml
+  778  cd ..
+  779  cp --help | grep recur
+  780  cp -r openstack_deploy/ /etc/
+  781  cd /etc/openstack_deploy/

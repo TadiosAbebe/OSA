@@ -23,11 +23,11 @@ network:
   bridges:
     br-mgmt: # Container/Host management bridge
       addresses:
-      - 172.29.236.10/22
+      - 172.29.232.10/22
       interfaces: 
       - bond0.10
       mtu: 9000
-      gateway4: 172.29.236.1
+      gateway4: 172.29.232.1
       nameservers:
         addresses:
         - 8.8.8.8

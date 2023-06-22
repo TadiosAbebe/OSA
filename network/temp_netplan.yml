@@ -13,8 +13,8 @@ network:
       id: 10
       link: eno1
       addresses:
-      - 172.29.236.x/22
-      gateway4: 172.29.236.1
+      - 172.29.232.x/22
+      gateway4: 172.29.232.1
       nameservers:
         addresses:
         - 8.8.8.8

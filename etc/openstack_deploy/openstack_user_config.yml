@@ -1,18 +1,18 @@
 ---
 cidr_networks:
-  container: 172.29.236.0/22
+  container: 172.29.232.0/22
   tunnel: 172.29.240.0/22
   storage: 172.29.244.0/22
 
 used_ips:
-  - "172.29.236.1,172.29.236.50"
+  - "172.29.232.1,172.29.232.50"
   - "172.29.240.1,172.29.240.50"
   - "172.29.244.1,172.29.244.50"
   - "172.29.248.1,172.29.248.50"
 
 global_overrides:
-  internal_lb_vip_address: 172.29.236.40
-  external_lb_vip_address: 172.29.236.41
+  internal_lb_vip_address: 172.29.232.8
+  external_lb_vip_address: 172.29.232.9
   management_bridge: "br-mgmt"
   provider_networks:
     - network:
@@ -66,38 +66,38 @@ global_overrides:
 # galera, memcache, rabbitmq, utility
 shared-infra_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # repository (apt cache, python packages, etc)
 repo-infra_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # load balancer
 haproxy_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # os-infra_hosts
 os-infra_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 ###
 ### OpenStack
@@ -106,25 +106,25 @@ os-infra_hosts:
 # keystone
 identity_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # cinder api services
 storage-infra_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # glance
 # image_hosts:
 #   storage01:
-#     ip: 172.29.236.31
+#     ip: 172.29.232.31
 #     container_vars:
 #       limit_container_types: glance
 #       glance_remote_client:
@@ -136,80 +136,80 @@ storage-infra_hosts:
 # nova api, conductor, etc services
 compute-infra_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # heat
 orchestration_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # horizon
 dashboard_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # neutron server, agents (L3, etc)
 network_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # ceilometer (telemetry data collection)
 metering-infra_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # aodh (telemetry alarm service)
 metering-alarm_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # gnocchi (telemetry metrics storage)
 metrics_hosts:
   infra01:
-    ip: 172.29.236.11
+    ip: 172.29.232.11
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
 
 # nova hypervisors
 compute_hosts:
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
 
 # ceilometer compute agent (telemetry data collection)
 metering-compute_hosts:
   compute01:
-    ip: 172.29.236.21
+    ip: 172.29.232.21
 
 # cinder volume hosts (LVM-backed)
 storage_hosts:
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
     container_vars:
       cinder_backends:
         limit_container_types: cinder_volume
@@ -223,4 +223,4 @@ storage_hosts:
 
 log_hosts:
   storage01:
-    ip: 172.29.236.31
+    ip: 172.29.232.31
