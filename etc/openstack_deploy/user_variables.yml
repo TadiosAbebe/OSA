@@ -1,5 +1,5 @@
 ---
-debug: false
+debug: true
 install_method: source
 glance_default_store: file
 nova_virt_type: kvm
@@ -13,3 +13,7 @@ neutron_plugin_type: ml2.ovn
 neutron_plugin_base:
   - neutron.services.ovn_l3.plugin.OVNL3RouterPlugin
 neutron_ml2_drivers_type: "vlan,local,geneve"
+
+nova_service_negate:
+  - nova-agent.service
+  - nova-resetnetwork.service
