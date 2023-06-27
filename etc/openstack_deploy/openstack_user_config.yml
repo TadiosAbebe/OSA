@@ -1,8 +1,8 @@
 ---
 cidr_networks:
   container: 172.29.232.0/22
-  tunnel: 172.29.240.0/22
   storage: 172.29.244.0/22
+  tunnel: 172.29.240.0/22
 
 used_ips:
   - "172.29.232.1,172.29.232.50"
@@ -11,60 +11,68 @@ used_ips:
   - "172.29.248.1,172.29.248.50"
 
 global_overrides:
-  internal_lb_vip_address: 172.29.232.8
   external_lb_vip_address: 172.29.232.9
+  internal_lb_vip_address: 172.29.232.8
   management_bridge: "br-mgmt"
   provider_networks:
     - network:
-        container_bridge: "br-mgmt"
-        container_type: "veth"
-        container_interface: "eth1"
-        ip_from_q: "container"
-        type: "raw"
+        container_bridge: br-mgmt
+        container_interface: eth1
+        container_type: veth
         group_binds:
           - all_containers
           - hosts
+        ip_from_q: container
         is_container_address: true
+        static_routes:
+          - cidr: 172.29.248.0/22
+            gateway: 172.29.232.8
+        type: raw
     - network:
-        container_bridge: "br-vxlan"
-        container_type: "veth"
-        container_interface: "eth10"
-        ip_from_q: "tunnel"
-        type: "geneve"
-        range: "1:1000"
-        net_name: "geneve"
+        container_bridge: br-vxlan
+        container_interface: eth10
+        container_type: veth
         group_binds:
           - neutron_ovn_controller
-        is_container_address: true
+        ip_from_q: tunnel
+        net_name: geneve
+        range: 1:1000
+        type: geneve
     - network:
-        container_bridge: "br-provider"
-        container_type: "veth"
-        type: "vlan"
-        range: "101:200,301:400"
-        net_name: "vlan"
-        network_interface: "br-vlan"
+        container_bridge: br-provider
         group_binds:
-          - neutron_ovn_controller
+          - neutron_ovn_gateway
+        net_name: vlan
+        network_interface: eth12
+        range: 101:200,301:400
+        type: vlan
     - network:
-        container_bridge: "br-storage"
-        container_bridge_type: "openvswitch"
-        container_type: "veth"
-        container_interface: "eth2"
-        ip_from_q: "storage"
-        type: "raw"
+        container_bridge: br-provider
+        container_type: veth
+        group_binds:
+          - neutron_ovn_gateway
+        net_name: vlan
+        type: flat
+    - network:
+        container_bridge: br-storage
+        container_interface: eth2
+        container_bridge_type: openvswitch
+        container_type: veth
         group_binds:
           - glance_api
           - cinder_api
           - cinder_volume
           - nova_compute
-        is_container_address: true
+          - manila_share
+          - swift_proxy
+          - ceph-mon
+          - ceph-osd
+        ip_from_q: storage
+        type: raw
 
-###
-### Infrastructure
-###
 
-# galera, memcache, rabbitmq, utility
-shared-infra_hosts:
+# keystone
+identity_hosts:
   infra01:
     ip: 172.29.232.11
   compute01:
@@ -81,14 +89,22 @@ repo-infra_hosts:
   storage01:
     ip: 172.29.232.31
 
-# load balancer
-haproxy_hosts:
+# galera, memcache, rabbitmq, utility
+shared-infra_hosts:
   infra01:
     ip: 172.29.232.11
   compute01:
     ip: 172.29.232.21
   storage01:
     ip: 172.29.232.31
+
+
+# load balancer
+haproxy_hosts:
+  infra01:
+    ip: 172.29.232.11
+  compute01:
+    ip: 172.29.232.21
 
 # os-infra_hosts
 os-infra_hosts:
@@ -99,18 +115,6 @@ os-infra_hosts:
   storage01:
     ip: 172.29.232.31
 
-###
-### OpenStack
-###
-
-# keystone
-identity_hosts:
-  infra01:
-    ip: 172.29.232.11
-  compute01:
-    ip: 172.29.232.21
-  storage01:
-    ip: 172.29.232.31
 
 # cinder api services
 storage-infra_hosts:
@@ -121,44 +125,28 @@ storage-infra_hosts:
   storage01:
     ip: 172.29.232.31
 
+# cinder volume hosts (LVM-backed)
+storage_hosts:
+  storage01:
+    ip: 172.29.232.31
+    container_vars:
+      cinder_backends:
+        lvm:
+          iscsi_ip_address: "{{ cinder_storage_address }}"
+          lvm_type: thin
+          volume_backend_name: LVM_iSCSI
+          volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
+          volume_group: cinder-volumes
+
 # glance
-# image_hosts:
-#   storage01:
-#     ip: 172.29.232.31
-#     container_vars:
-#       limit_container_types: glance
-#       glance_remote_client:
-#         - what: "172.29.244.15:/images"
-#           where: "/var/lib/glance/images"
-#           type: "nfs"
-#           options: "_netdev,auto"
-
-# nova api, conductor, etc services
-compute-infra_hosts:
-  infra01:
-    ip: 172.29.232.11
-  compute01:
-    ip: 172.29.232.21
+image_hosts:
   storage01:
     ip: 172.29.232.31
 
-# heat
-orchestration_hosts:
-  infra01:
-    ip: 172.29.232.11
+# nova hypervisors
+compute_hosts:
   compute01:
     ip: 172.29.232.21
-  storage01:
-    ip: 172.29.232.31
-
-# horizon
-dashboard_hosts:
-  infra01:
-    ip: 172.29.232.11
-  compute01:
-    ip: 172.29.232.21
-  storage01:
-    ip: 172.29.232.31
 
 # neutron server, agents (L3, etc)
 network_hosts:
@@ -169,58 +157,7 @@ network_hosts:
   storage01:
     ip: 172.29.232.31
 
-# ceilometer (telemetry data collection)
-metering-infra_hosts:
-  infra01:
-    ip: 172.29.232.11
-  compute01:
-    ip: 172.29.232.21
-  storage01:
-    ip: 172.29.232.31
-
-# aodh (telemetry alarm service)
-metering-alarm_hosts:
-  infra01:
-    ip: 172.29.232.11
-  compute01:
-    ip: 172.29.232.21
-  storage01:
-    ip: 172.29.232.31
-
-# gnocchi (telemetry metrics storage)
-metrics_hosts:
-  infra01:
-    ip: 172.29.232.11
-  compute01:
-    ip: 172.29.232.21
-  storage01:
-    ip: 172.29.232.31
-
-# nova hypervisors
-compute_hosts:
-  compute01:
-    ip: 172.29.232.21
-
-# ceilometer compute agent (telemetry data collection)
-metering-compute_hosts:
-  compute01:
-    ip: 172.29.232.21
-
-# cinder volume hosts (LVM-backed)
-storage_hosts:
-  storage01:
-    ip: 172.29.232.31
-    container_vars:
-      cinder_backends:
-        limit_container_types: cinder_volume
-        lvm:
-          volume_group: cinder-volumes
-          volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
-          volume_backend_name: LVM_iSCSI
-          iscsi_ip_address: "{{ cinder_storage_address }}"
-
 # logging host
-
 log_hosts:
   storage01:
     ip: 172.29.232.31
