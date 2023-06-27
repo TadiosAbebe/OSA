@@ -33,5 +33,5 @@ network:
         - 8.8.8.8
         - 8.8.4.4
         search:
-        - sys.zergaw.com
+        - google.com
   version: 2

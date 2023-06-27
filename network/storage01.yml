@@ -50,7 +50,7 @@ network:
         - 8.8.8.8
         - 8.8.4.4
         search:
-        - sys.zergaw.com
+        - google.com
     br-storage: # Storage bridge
       addresses:
       - 172.29.244.31/22
