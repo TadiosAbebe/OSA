@@ -35,3 +35,12 @@ Inside the galera containers of the infrastructure nodes
 
 ref: https://stackoverflow.com/questions/37212127/mariadb-gcomm-backend-connection-failed-110
 
+---
+Error:
+openstack-ansible setup-openstack.yml script keeps failing on setting up gnocchi on "python_venv_build : Build wheels for the packages to be installed into the venv" Task to be specific. I was trying to deploy the Zed release of OpenStack, but the issue still persists when trying to deploy the Antelope release of OpenStack. When I look at the python log file generated from the venv build, I see a bunch of "# Package would be ignored # warning" about 18 of them; some of those are for the packages gnoochi.cli, gnoochi.incoming, gnoochi.indexer, gnoochi.rest, gnoochi.storage, gnoochi.test, and so on... and it says "AttributeError: module 'setuptools.command.easy_install' has no attribute 'get_script_header'"
+
+
+Solution:
+I need to apply both of the aforementioned patches for it to work for me.
+- adding "gnocchi_git_install_branch: 6f35ea5413a9f78551d8193b8d2a6d77c49b6372" to /etc/openstack_deploy/user_variables.yml
+- adding "setuptools==67.8.0" to /opt/openstack-ansible/global-requirement-pins.txt

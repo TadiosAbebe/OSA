@@ -1,5 +1,6 @@
 ---
-debug: false
+gnocchi_git_install_branch: 6f35ea5413a9f78551d8193b8d2a6d77c49b6372
+debug: true
 install_method: source
 glance_default_store: file
 nova_virt_type: kvm
