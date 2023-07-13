@@ -11,8 +11,8 @@ used_ips:
   - "172.29.248.1,172.29.248.50"
 
 global_overrides:
-  internal_lb_vip_address: 172.29.236.40
-  external_lb_vip_address: 172.29.236.41
+  internal_lb_vip_address: 172.29.236.8
+  external_lb_vip_address: 172.29.236.9
   management_bridge: "br-mgmt"
   provider_networks:
     - network:
@@ -37,15 +37,20 @@ global_overrides:
           - neutron_ovn_controller
         is_container_address: true
     - network:
-        container_bridge: "br-vlan"
-        container_type: "veth"
-        container_interface: "eth11"
-        host_bind_override: "bond1"
+        container_bridge: "br-provider"
         type: "vlan"
         range: "101:200,301:400"
         net_name: "vlan"
+        network_interface: "br-vlan"
         group_binds:
-          - neutron_ovn_controller
+          - neutron_ovn_gateway
+    network:
+        container_bridge: "br-provider"
+        container_type: "veth"
+        group_binds:
+          - neutron_ovn_gateway
+        net_name: "vlan"
+        type: "flat"
     - network:
         container_bridge: "br-storage"
         container_bridge_type: "openvswitch"
@@ -215,6 +220,7 @@ storage_hosts:
       cinder_backends:
         limit_container_types: cinder_volume
         lvm:
+          lvm_type: thin
           volume_group: cinder-volumes
           volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
           volume_backend_name: LVM_iSCSI
