@@ -44,7 +44,7 @@ global_overrides:
         network_interface: "br-vlan"
         group_binds:
           - neutron_ovn_gateway
-    network:
+    - network:
         container_bridge: "br-provider"
         container_type: "veth"
         group_binds:
