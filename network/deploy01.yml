@@ -5,7 +5,7 @@ network:
     eno3: {}
     eno4: {}
   bonds:
-      bond0: # Management and storage
+      bond0: # Management bond
           interfaces:
           - eno1
           - eno3
@@ -32,6 +32,4 @@ network:
         addresses:
         - 8.8.8.8
         - 8.8.4.4
-        search:
-        - sys.zergaw.com
   version: 2
