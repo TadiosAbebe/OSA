@@ -13,4 +13,3 @@ haproxy_keepalived_internal_interface: br-mgmt
 neutron_plugin_type: ml2.ovn
 neutron_plugin_base:
   - neutron.services.ovn_l3.plugin.OVNL3RouterPlugin
-neutron_ml2_drivers_type: "vlan,local,geneve"
