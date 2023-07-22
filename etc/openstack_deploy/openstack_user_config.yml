@@ -11,8 +11,8 @@ used_ips:
   - "172.29.248.1,172.29.248.50"
 
 global_overrides:
-  internal_lb_vip_address: 172.29.236.40
-  external_lb_vip_address: 172.29.236.41
+  internal_lb_vip_address: 172.29.236.8
+  external_lb_vip_address: 172.29.236.9
   management_bridge: "br-mgmt"
   provider_networks:
     - network:
@@ -26,7 +26,7 @@ global_overrides:
           - hosts
         is_container_address: true
     - network:
-        container_bridge: "br-vxlan"
+        container_bridge: "br-overlay"
         container_type: "veth"
         container_interface: "eth10"
         ip_from_q: "tunnel"
@@ -37,10 +37,10 @@ global_overrides:
           - neutron_ovn_controller
         is_container_address: true
     - network:
-        container_bridge: "br-vlan"
+        container_bridge: "br-provider"
         container_type: "veth"
         container_interface: "eth11"
-        host_bind_override: "bond1"
+        network_interface: "bond1"
         type: "vlan"
         range: "101:200,301:400"
         net_name: "vlan"
@@ -48,7 +48,6 @@ global_overrides:
           - neutron_ovn_controller
     - network:
         container_bridge: "br-storage"
-        container_bridge_type: "openvswitch"
         container_type: "veth"
         container_interface: "eth2"
         ip_from_q: "storage"
@@ -58,7 +57,6 @@ global_overrides:
           - cinder_api
           - cinder_volume
           - nova_compute
-        is_container_address: true
 
 ###
 ### Infrastructure
@@ -122,18 +120,6 @@ storage-infra_hosts:
   storage01:
     ip: 172.29.236.31
 
-# glance
-# image_hosts:
-#   storage01:
-#     ip: 172.29.236.31
-#     container_vars:
-#       limit_container_types: glance
-#       glance_remote_client:
-#         - what: "172.29.244.15:/images"
-#           where: "/var/lib/glance/images"
-#           type: "nfs"
-#           options: "_netdev,auto"
-
 # nova api, conductor, etc services
 compute-infra_hosts:
   infra01:
@@ -169,6 +155,18 @@ network_hosts:
     ip: 172.29.236.21
   storage01:
     ip: 172.29.236.31
+
+network-northd_hosts:
+  infra01:
+    ip: 172.29.236.11
+  compute01:
+    ip: 172.29.236.21
+  storage01:
+    ip: 172.29.236.31
+
+network-gateway_hosts:
+  compute01:
+    ip: 172.29.236.21
 
 # ceilometer (telemetry data collection)
 metering-infra_hosts:
@@ -219,9 +217,3 @@ storage_hosts:
           volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
           volume_backend_name: LVM_iSCSI
           iscsi_ip_address: "{{ cinder_storage_address }}"
-
-# logging host
-
-log_hosts:
-  storage01:
-    ip: 172.29.236.31
