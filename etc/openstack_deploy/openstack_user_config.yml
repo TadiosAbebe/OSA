@@ -138,6 +138,15 @@ orchestration_hosts:
   storage01:
     ip: 172.29.236.31
 
+# app catalog
+murano-infra_hosts:
+  infra01:
+    ip: 172.29.236.11
+  compute01:
+    ip: 172.29.236.21
+  storage01:
+    ip: 172.29.236.31
+
 # horizon
 dashboard_hosts:
   infra01:
