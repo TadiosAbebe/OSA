@@ -59,6 +59,13 @@ ref: https://review.opendev.org/c/openstack/openstack-ansible-os_horizon/+/88891
 
 ---
 
+### Error:
+After successful deployment of openstack. instance can not be created with the following cinder error "did not finish being created even after we waited 3 seconds or 2 attempts. And its status is error"
+### Solution: 
+This happens because of the instance image you are using to create the virtual machine, so first verify that cinder is working by creating a cinder volume under volume > create volume, if this completed successfully the remove you openstack image and try to upload it properly.
+
+---
+
 # Chat with OSA-team
 1. Neutron troubleshooting
 2. Openstack_user_config troubleshooting
