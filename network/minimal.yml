@@ -1,0 +1,14 @@
+network:
+  ethernets:
+    eth0: {}
+    eth1: {}
+    eth2: {}
+    eth3: {}
+  vlans:
+    eth0.10:
+      id: 10
+      link: eth0
+      addresses:
+      - 172.29.236.11/22
+      gateway4: 172.29.236.1
+  version: 2
