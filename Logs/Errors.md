@@ -1,40 +1,45 @@
 # Errors and Solutions
 ---
 ### Error:
-os-nova playbook fail on TASK [ceph_client : Define libvirt nova secret] with the following error
-fatal: [compute01]: FAILED! => {"changed": true, "cmd": ["virsh", "secret-define", "--file", "/tmp/nova-secret.xml"], "delta": "0:00:00.019320", "end": "2023-11
+- Instance creation failed with a log error message on the compute node `journalctl -u nova-compute`  Failed to start libvirt guest: libvirt.libvirtError: XML error: invalid secret uuid 'openstack'
+### Solution:
+- It seems like the secret uuid 'openstack' is read from the hardcoded sercret openstack inside the user_secret.yml file which is now deperciated
+---
+### Error:
+- os-nova playbook fail on TASK [ceph_client : Define libvirt nova secret] with the following error
+	fatal: [compute01]: FAILED! => {"changed": true, "cmd": ["virsh", "secret-define", "--file", "/tmp/nova-secret.xml"], "delta": "0:00:00.019320", "end": "2023-11
 -05 15:12:25.649258", "msg": "non-zero return code", "rc": 1, "start": "2023-11-05 15:12:25.629938", "stderr": "error: Failed to set attributes from /tmp/nova-s
 ecret.xml\nerror: internal error: malformed uuid element", "stderr_lines": ["error: Failed to set attributes from /tmp/nova-secret.xml", "error: internal error:
  malformed uuid element"], "stdout": "", "stdout_lines": []}
-fatal: [compute02]: FAILED! => {"changed": true, "cmd": ["virsh", "secret-define", "--file", "/tmp/nova-secret.xml"], "delta": "0:00:00.018461", "end": "2023-11
+	fatal: [compute02]: FAILED! => {"changed": true, "cmd": ["virsh", "secret-define", "--file", "/tmp/nova-secret.xml"], "delta": "0:00:00.018461", "end": "2023-11
 -05 15:12:25.766331", "msg": "non-zero return code", "rc": 1, "start": "2023-11-05 15:12:25.747870", "stderr": "error: Failed to set attributes from /tmp/nova-s
 ecret.xml\nerror: internal error: malformed uuid element", "stderr_lines": ["error: Failed to set attributes from /tmp/nova-secret.xml", "error: internal error:
  malformed uuid element"], "stdout": "", "stdout_lines": []}
 ### Solution:
-generate a uuid using uuidgen and place that uuid in user_variables.yml for the 'cinder_ceph_client_uuid' entry
+- generate a uuid using uuidgen and place that uuid in user_variables.yml for the 'cinder_ceph_client_uuid' entry
 ---
 ### Error:
-setup-infrastructure.yml failing on TASK [repo_server : Retrieve upper constraints using https] with error
-fatal: [infra01_repo_container-54a7b385 -> localhost]: FAILED! => {"changed": false, "dest": "/etc/openstack_deploy/upper-constraints/upper_cons
+- setup-infrastructure.yml failing on TASK [repo_server : Retrieve upper constraints using https] with error
+	fatal: [infra01_repo_container-54a7b385 -> localhost]: FAILED! => {"changed": false, "dest": "/etc/openstack_deploy/upper-constraints/upper_cons
 traints_8a9f69d09be03926242bfc2a04168a166f23209f.txt", "elapsed": 0, "msg": "Request failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] cer
 tificate verify failed: certificate is not yet valid (_ssl.c:1131)>", "url": "https://releases.openstack.org/constraints/upper/8a9f69d09be039262
 42bfc2a04168a166f23209f"}
 ### Solution:
-update and upgrade system, if you encounter temporary failure resolving 'archive.unbuntu.com' error `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
-if you enconter is not valid yet(invalid for another 13h) error `sudo hwclock --hctosys`
+- update and upgrade system, if you encounter temporary failure resolving 'archive.unbuntu.com' error `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
+- if you enconter is not valid yet(invalid for another 13h) error `sudo hwclock --hctosys`
 ---
 ### Error:
-setup-hosts.ymal failing on TASK: check how kernel modules are implemented (statically builtin, dynamic, not set) with error
-fatal: [infra01]: FAILED! => {"changed": false, "msg": "file not found: /boot/config-5.4.0-165-generic"}
-fatal: [storage01]: FAILED! => {"changed": false, "msg": "file not found: /boot/config-5.4.0-165-generic"}
-fatal: [compute01]: FAILED! => {"changed": false, "msg": "file not found: /boot/config-5.4.0-165-generic"}
+- setup-hosts.ymal failing on TASK: check how kernel modules are implemented (statically builtin, dynamic, not set) with error
+	fatal: [infra01]: FAILED! => {"changed": false, "msg": "file not found: /boot/config-5.4.0-165-generic"}
+	fatal: [storage01]: FAILED! => {"changed": false, "msg": "file not found: /boot/config-5.4.0-165-generic"}
+	fatal: [compute01]: FAILED! => {"changed": false, "msg": "file not found: /boot/config-5.4.0-165-generic"}
 ### Solution:
-This is maily caused by different kernel version on the deployment and target host, starting from a clean installation or an earlier snapshot will solve the probelm
+- This is maily caused by different kernel version on the deployment and target host, starting from a clean installation or an earlier snapshot will solve the probelm
 ---
 ### Error:
-setup-infrastructure.yml failing on TASK: Fail if galera_cluster_name doesnt match provided value with the error The galera_cluster_name variable does not match what is set in mysql
+- setup-infrastructure.yml failing on TASK: Fail if galera_cluster_name doesnt match provided value with the error The galera_cluster_name variable does not match what is set in mysql
 ### Solution:
-This error was happening when deploying openstack in hyperconverge mode with the ceph cluster, separating the ceph cluster onto its own machine has solved the issue
+- This error was happening when deploying openstack in hyperconverge mode with the ceph cluster, separating the ceph cluster onto its own machine has solved the issue
 ---
 ### Error:
 1. Unable to login into openstack horizon dashboard. "Something went wrong" error afer putting in username and password
