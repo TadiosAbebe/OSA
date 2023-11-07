@@ -1,6 +1,11 @@
 # Errors and Solutions
 ---
 ### Error:
+Openstack volume stuck on reserved state and unable to delete the volume. Trying to delete the volume will result in the error "Error: You are not allowed to delete volume: 1d30fe4c-c329-431d-8062-4deedf276ff5" on horizon
+### Solution
+Setting the openstack volume to available state will allow you to delete the volume. Use `openstack volume list` to find the volume id, and set it's state available using the following command `openstack volume set --state available volume_id`
+---
+### Error:
 - Instance creation failed with a log error message on the compute node `journalctl -u nova-compute`  Failed to start libvirt guest: libvirt.libvirtError: XML error: invalid secret uuid 'openstack'
 ### Solution:
 - It seems like the secret uuid 'openstack' is read from the hardcoded sercret openstack inside the user_secret.yml file which is now deperciated
