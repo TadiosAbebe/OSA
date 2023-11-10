@@ -37,6 +37,9 @@ network:
     bond1.30: # Tunnel (geneve/vxlan/gre) Network
       id: 30
       link: bond1
+    bond1.40: # CEPH cluster network VLAN
+      id: 40
+      link: bond1
   bridges:
     br-mgmt: # Container/Host management bridge
       addresses:
@@ -62,5 +65,11 @@ network:
       - 172.29.240.4X/22
       interfaces:
       - bond1.30
+      mtu: 9000
+    br-ceph: # Ceph cluster bridge
+      addresses:
+      - 172.29.248.4X/22
+      interfaces:
+      - bond1.40
       mtu: 9000
   version: 2
