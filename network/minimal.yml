@@ -10,5 +10,7 @@ network:
       link: eth0
       addresses:
       - 172.29.236.11/22
-      gateway4: 172.29.236.1
+      routes:
+      - to: 0.0.0.0/0
+        via: 172.29.236.1
   version: 2

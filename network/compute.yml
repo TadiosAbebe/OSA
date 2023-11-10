@@ -44,7 +44,9 @@ network:
       interfaces: 
       - bond0.10
       mtu: 9000
-      gateway4: 172.29.236.1
+      routes:
+      - to: 0.0.0.0/0
+        via: 172.29.236.1
       nameservers:
         addresses:
         - 8.8.8.8
