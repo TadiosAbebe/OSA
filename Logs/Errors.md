@@ -1,8 +1,47 @@
 # Errors and Solutions
 ---
 ### Error:
+Horizon dashboard sometimes having an issue retriving instance details, launching console,... with an error TOO MANY CONNECTIONS, SQLALCHEMY.EXC.OPERATIONALERROR: (PYMYSQL.ERR.OPERATIONALERROR) (1040, U’TOO MANY CONNECTIONS’)
+### Solution:
+Connect to the galera container of your openstack deployment `lxc-attach infra01_galaera_xxxx`, login to your mariadb database `mysql`, the view what is the currently set value for max_connection
+- `show variables like '%connection%'`
+```
+MariaDB [(none)]> show variables like '%connection%';
++---------------------------+--------------------+
+| Variable_name             | Value              |
++---------------------------+--------------------+
+| character_set_connection  | utf8mb3            |
+| collation_connection      | utf8mb3_general_ci |
+| default_master_connection |                    |
+| extra_max_connections     | 10                 |
+| max_connections           | 800                |
+| max_user_connections      | 0                  |
++---------------------------+--------------------+
+6 rows in set (0.001 sec)
+```
+- Check max used connections and connection error: `show global status like '%connections%'`
+```
+MariaDB [(none)]> show global status like '%connections%';
++-----------------------------------+-------+
+| Variable_name                     | Value |
++-----------------------------------+-------+
+| Connection_errors_max_connections | 0     |
+| Connections                       | 77702 |
+| Max_used_connections              | 802   |
+| Slave_connections                 | 0     |
+| wsrep_open_connections            | 0     |
++-----------------------------------+-------+
+5 rows in set (0.002 sec)
+```
+- Set the max_connections to a higher number, `set global max_connections=1024;`
+```
+MariaDB [(none)]> set global max_connections=1024;
+Query OK, 0 rows affected (0.000 sec)
+```
+---
+### Error:
 Openstack volume stuck on reserved state and unable to delete the volume. Trying to delete the volume will result in the error "Error: You are not allowed to delete volume: 1d30fe4c-c329-431d-8062-4deedf276ff5" on horizon
-### Solution
+### Solution:
 Setting the openstack volume to available state will allow you to delete the volume. Use `openstack volume list` to find the volume id, and set it's state available using the following command `openstack volume set --state available volume_id`
 ---
 ### Error:
