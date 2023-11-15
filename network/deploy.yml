@@ -1,32 +1,17 @@
 network:
   ethernets:
-    eno1: {}
-    eno2: {}
-    eno3: {}
-    eno4: {}
+    eth0: {}
   bonds:
       bond0: # Management and storage
           interfaces:
-          - eno1
-          - eno3
+          - eth0
           mtu: 9000
           parameters:
             lacp-rate: fast
             mii-monitor-interval: 100
             transmit-hash-policy: layer3+4
             mode: active-backup
-            primary: eno1
-      bond1: # Provider and tenant
-          interfaces:
-          - eno2
-          - eno4
-          mtu: 9000
-          parameters:
-            lacp-rate: fast
-            mii-monitor-interval: 100
-            transmit-hash-policy: layer3+4
-            mode: active-backup
-            primary: eno2
+            primary: eth0
   vlans:
     bond0.10: # Management VLAN
       id: 10
@@ -34,31 +19,33 @@ network:
     bond0.20: # Openstack Storage and CEPH public network VLAN
       id: 20
       link: bond0
-    bond1.30: # Tunnel (geneve/vxlan/gre) Network
+    bond0.30: # Tunnel (geneve/vxlan/gre) Network
       id: 30
-      link: bond1
+      link: bond0
   bridges:
     br-mgmt: # Container/Host management bridge
       addresses:
-      - 172.29.236.21/22
+      - 172.29.236.10/22
       interfaces: 
       - bond0.10
       mtu: 9000
-      gateway4: 172.29.236.1
+      routes:
+      - to: 0.0.0.0/0
+        via: 172.29.236.1
       nameservers:
         addresses:
         - 8.8.8.8
         - 8.8.4.4
     br-storage: # Storage bridge
       addresses:
-      - 172.29.244.21/22
+      - 172.29.244.10/22
       interfaces:
       - bond0.20
       mtu: 9000
     br-overlay: # Networking (tunnel/overlay) bridge
       addresses:
-      - 172.29.240.21/22
+      - 172.29.240.10/22
       interfaces:
-      - bond1.30
+      - bond0.30
       mtu: 9000
   version: 2
