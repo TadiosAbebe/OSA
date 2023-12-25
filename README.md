@@ -683,12 +683,12 @@ git clone https://github.com/openstack/rally-openstack.git
 - Copy the test cases to a suitable location
 ```bash
 mkdir rally-tests
-cp rally-openstack/samples/tasks/scenarios/* rally-tests
+cp -r rally-openstack/samples/tasks/scenarios/* rally-tests
 ```
 - Verify, edit and run task
 ```bash
 nano rally-tests/nova/boot-and-delete.yaml
-rally task start rally-tasts/nova/boot-and-delete.yaml
+rally task start rally-tests/nova/boot-and-delete.yaml
 ```
 - When editing a rally task, either to change the flavor , image ..., you can use the openstack cli right from the deployment node since it will be install with rally and you already have access to the openstack cloud with the sourcing of the openrc file
 - Once the task run is completed you can export html report using the following command
