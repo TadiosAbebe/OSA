@@ -655,8 +655,9 @@ openstack security group rule create --ingress --ethertype IPv4 --protocol tcp -
 Openstack cloud can be tested from deployment node by install rally
 - Install rally using pip, you may need to install pip if it is not installed on your system first
 ```bash
-sudo apt install python3-pip
+sudo apt install python3-pip -y
 pip install rally-openstack
+pip install fixtures
 ```
 - The you need to create rally database before running any test, this will create sqlite db to store the test result of the tests
 ```bash
