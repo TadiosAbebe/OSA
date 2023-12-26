@@ -2,16 +2,16 @@
 - [Creatting a ceph cluster](#Creating-a-ceph-cluster)
   - [Preparing ceph for openstack deployment](##Preparing-ceph-for-openstack-deployment)
 - [Deploying openstack with ceph](#Deploying-openstack-with-ceph)
-  - [Preparing the deployment host](##Preparing-the-deployment-host)
-  - [Preparing the target host](##Preparing-the-target-host)
-  - [Running openstack-ansible deployment scripts](##Running-openstack-ansible-deployment-scripts)
-  - [Verifying the openstack cloud](##Verifying-the-openstack-cloud)
+  - [Preparing the deployment host](#Preparing-the-deployment-host)
+  - [Preparing the target host](#Preparing-the-target-host)
+  - [Running openstack-ansible deployment scripts](#Running-openstack-ansible-deployment-scripts)
+  - [Verifying the openstack cloud](#Verifying-the-openstack-cloud)
 - [Openstack post installation configurations](#Openstack-post-installation-configurations)
 - [Testing the openstack using rally](#Testing-the-openstack-using-rally)
 - [Appendix](#Appendix)
   - [Temporary netplan file](##Temporary-netplan-file)
-  - [Installing monitoring packages](##Installing-monitoring-packages)
-  - [Installing management packages](##Installing-management-packages)
+  - [Installing monitoring packages](#Installing-monitoring-packages)
+  - [Installing management packages](#Installing-management-packages)
 
 Before preceding with deployment of openstack, we need to setup an external ceph cluster that we later on connect with our openstack deployment
 
@@ -127,9 +127,9 @@ systemctl restart cloud-init
 sudo apt update && sudo apt upgrade -y
 ```
 
-> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](##Installing-monitoring-packages)
+> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](#Installing-monitoring-packages)
 
-> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](##Installing-management-packages)
+> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](#Installing-management-packages)
 
 - Set the ceph version for your deployment using the following command
 ```bash
@@ -215,7 +215,7 @@ ceph auth get-or-create client.cinder-backup mon 'profile rbd' osd 'profile rbd 
 
 - The below steps assume that you have already installed operating system on the hosts and it is tested on ubuntu server 22.04
 - The deployment host is the host which we will be using as our ansible controller, and install all ansible and openstack ansible related packages
-- We will start by configuring the network, for configuring temporary network configuration you can refer the following netplan [Temporary netplan file](##Temporary-netplan-file)
+- We will start by configuring the network, for configuring temporary network configuration you can refer the following netplan [Temporary netplan file](#Temporary-netplan-file)
 ```yaml
 network:
   ethernets:
@@ -302,9 +302,9 @@ sudo apt update && sudo apt upgrade -y
 sudo reboot now
 ```
 
-> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](##Installing-monitoring-packages)
+> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](#Installing-monitoring-packages)
 
-> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](##Installing-management-packages)
+> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](#Installing-management-packages)
 
 - Update the hosts file with the openstack cluster hosts ip and name, you can find the list inside [etc/openstack_deploy/custom_vars.md]()
 ```bash
@@ -455,9 +455,9 @@ systemctl restart cloud-init
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
-> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](##Installing-monitoring-packages)
+> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](#Installing-monitoring-packages)
 
-> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](##Installing-management-packages)
+> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](#Installing-management-packages)
 
 > At this point it is a good idea to go to the deployment node's cockpit interface and add the rest of the node inside cockpit for easier management
 
