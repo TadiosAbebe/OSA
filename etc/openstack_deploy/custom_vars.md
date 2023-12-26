@@ -30,7 +30,7 @@ _storage_hosts: &storage_hosts
     ip: 172.29.236.32
   storage03:
     ip: 172.29.236.33
-_cidr_networks: *cidr_networks
+_cidr_networks: &cidr_networks
   container: 172.29.236.0/22
   tunnel: 172.29.240.0/22
   storage: 172.29.244.0/22
