@@ -159,7 +159,7 @@ cephadm bootstrap --mon-ip 172.2x.244.x --initial-dashboard-user "admin" --initi
 >> - Copy the ssh keys from /etc/ceph/ceph.pub on this bootstrap node to the rest of the cluster node of /root/.ssh/authorized_key
 - Install the ceph-common package
 ```bash
-apt install ceph-common
+apt install ceph-common -y
 ```
 > The below steps will only be performed on the bootstrap node and not on the other nodes, skip this for all nodes except the bootstrap node
 >> - Go into the cephadm shell with `cephadm shell` if you don't have the ceph-common package installed
