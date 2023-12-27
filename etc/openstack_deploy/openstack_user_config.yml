@@ -3,25 +3,25 @@
 _internal_lb_vip_address: &internal_lb_vip_address 172.29.236.8
 _external_lb_vip_address: &external_lb_vip_address 172.29.236.9
 _infra_hosts: &infra_hosts
-  infra01:
+  node11:
     ip: 172.29.236.11
-  infra02:
+  node12:
     ip: 172.29.236.12
-  infra03:
+  node13:
     ip: 172.29.236.13
 #_compute_hosts: &compute_hosts
-#  compute01:
+#  node21:
 #    ip: 172.29.236.21
-#  compute02:
+#  node22:
 #    ip: 172.29.236.22
-#  compute03:
+#  node23:
 #    ip: 172.29.236.23
 _storage_hosts: &storage_hosts
-  storage01:
+  node31:
     ip: 172.29.236.31
-  storage02:
+  node32:
     ip: 172.29.236.32
-  storage03:
+  node33:
     ip: 172.29.236.33
 _cidr_networks: &cidr_networks
   container: 172.29.236.0/22
