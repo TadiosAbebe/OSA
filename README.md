@@ -12,6 +12,7 @@
   - [Temporary netplan file](##Temporary-netplan-file)
   - [Installing monitoring packages](#Installing-monitoring-packages)
   - [Installing management packages](#Installing-management-packages)
+  - [Taking snapshot using timeshift](#Taking-snapshot-using-timeshift)
 
 Before preceding with deployment of openstack, we need to setup an external ceph cluster that we later on connect with our openstack deployment
 
@@ -757,4 +758,13 @@ nano /etc/cockpit/disallowed-users
 - restart cockpit service
 ```bash
 systemctl restart cockpit
+```
+## Taking snapshot using timeshift
+- Download, and install timeshift package
+```bash
+sudo apt install timeshift
+```
+- Run the following command to take snapshot, dont foget to replace the block device with respect to you environment
+```bash
+sudo timeshift --create --comment "comment" --snapshot-deivce /dev/sdx
 ```
