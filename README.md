@@ -355,8 +355,8 @@ cd ~
 git clone https://github.com/TadiosAbebe/OSA.git
 ```
 ```bash
-cp etc/openstack_deploy/user_variables.yml /etc/openstack_deploy
-cp etc/openstack_deploy/openstack_user_config.yml /etc/openstack_deploy
+cp /root/OSA/etc/openstack_deploy/user_variables.yml /etc/openstack_deploy
+cp /root/OSA/etc/openstack_deploy/openstack_user_config.yml /etc/openstack_deploy
 ```
 - Edit the contents of /etc/openstack_deploy/openstack_user_config.yml and replace with variables that reside under etc/openstack_deploy/custom_vars.yml
 - Edit the ceph_mons: variable inside /etc/openstack_deploy/user_variables to reflect your current environment
