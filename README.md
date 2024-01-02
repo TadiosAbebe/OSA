@@ -353,8 +353,6 @@ cd /opt/openstack-ansible
 cp -r /opt/openstack-ansible/etc/openstack_deploy /etc/openstack_deploy
 cd ~
 git clone https://github.com/TadiosAbebe/OSA.git
-cd OSA
-git checkout xxx
 ```
 ```bash
 cp etc/openstack_deploy/user_variables.yml /etc/openstack_deploy
