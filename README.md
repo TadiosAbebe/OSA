@@ -1,5 +1,5 @@
 # Openstack Internal Documentation
-- [Creatting a ceph cluster](#Creating-a-ceph-cluster)
+- [Creating a ceph cluster](#Creating-a-ceph-cluster)
   - [Preparing ceph for openstack deployment](##Preparing-ceph-for-openstack-deployment)
 - [Deploying openstack with ceph](#Deploying-openstack-with-ceph)
   - [Preparing the deployment host](#Preparing-the-deployment-host)
@@ -24,6 +24,17 @@ Before preceding with deployment of openstack, we need to setup an external ceph
 ```bash
 vgremove -f ceph-...
 pvremove -ff /dev/sdx
+```
+- Or you can use the following bash script to do the clean up
+```bash
+for vg in $(sudo vgs --noheadings -o vg_name | grep -v "ubuntu-vg"); do
+	echo "Deleting VG $vg..."
+	sudo vgremove -f $vg
+done
+for pv in $(sudo pvs --noheadings -o pv_name,vg_name | grep -v "ubuntu-vg" | awk '{print $1}'); do
+	echo "Deleting PV $pv..."
+      sudo pvremove -ff $pv
+done
 ```
 - Start by configuring the network on the host with the following network configuration file. and don't forget to change
     - the interface names under ethernets i.e. interface0, interface1, interface2, interface3
