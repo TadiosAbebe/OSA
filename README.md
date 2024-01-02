@@ -773,9 +773,9 @@ systemctl restart cockpit
 ## Taking snapshot using timeshift
 - Download, and install timeshift package
 ```bash
-sudo apt install timeshift
+sudo apt install timeshift -y
 ```
 - Run the following command to take snapshot, dont foget to replace the block device with respect to you environment
 ```bash
-sudo timeshift --create --comment "comment" --snapshot-deivce /dev/sdx
+sudo timeshift --create --comment "comment" --snapshot-device /dev/sdx
 ```
