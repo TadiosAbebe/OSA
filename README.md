@@ -1,6 +1,6 @@
 # Openstack Internal Documentation
 - [Creating a ceph cluster](#Creating-a-ceph-cluster)
-  - [Preparing ceph for openstack deployment](##Preparing-ceph-for-openstack-deployment)
+  - [Preparing ceph for openstack deployment](#Preparing-ceph-for-openstack-deployment)
 - [Deploying openstack with ceph](#Deploying-openstack-with-ceph)
   - [Preparing the deployment host](#Preparing-the-deployment-host)
   - [Preparing the target host](#Preparing-the-target-host)
