@@ -2,6 +2,7 @@
 
 ---
 ### Error:
+
 After a successful deployment of openstack 27.3.0, `openstack network agent list` command on the utilitiy container will only list one OVN Controller Gateway agent, while there should be 3, going into either the neutron-server container and viewing the journal logs or going into one of the nodes where the neutron-ovn-metadata-agent service is running and viewing the journal logs will show the following error
 ```
 ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn [-] OVS database connection to OVN_Southbound failed with error: 'non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>'. Verify that the OVS and OVN services are available and that the 'ovn_nb_connection' and 'ovn_sb_connection' configuration options are correct.: ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>
@@ -38,7 +39,7 @@ ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn ValueError:
 ```
 ### Solution:
 
-Restarting the whole infrastructure seems to solve the problem and ovn metadata agent is appearing on all the compute hosts when issuing `openstack network agent list`
+- Restarting the whole infrastructure seems to solve the problem and ovn metadata agent is appearing on all the compute hosts when issuing `openstack network agent list`
 ---
 
 ### Error:
