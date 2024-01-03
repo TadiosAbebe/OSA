@@ -1,6 +1,44 @@
 # Errors and Solutions
 
 ---
+### Error:
+After a successful deployment of openstack 27.3.0, `openstack network agent list` command on the utilitiy container will only list one OVN Controller Gateway agent, while there should be 3, going into either the neutron-server container and viewing the journal logs or going into one of the nodes where the neutron-ovn-metadata-agent service is running and viewing the journal logs will show the following error
+```
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn [-] OVS database connection to OVN_Southbound failed with error: 'non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>'. Verify that the OVS and OVN services are available and that the 'ovn_nb_connection' and 'ovn_sb_connection' configuration options are correct.: ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn Traceback (most recent call last):
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/neutron/plugins/ml2/drivers/ovn/mech_driver/ovsdb/impl_idl_ovn.py", line 126, in start_connection
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     self.ovsdb_connection.start()
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovsdbapp/backend/ovs_idl/connection.py", line 83, in start
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     idlutils.wait_for_change(self.idl, self.timeout)
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/neutron/plugins/ml2/drivers/ovn/mech_driver/ovsdb/impl_idl_ovn.py", line 52, in wait_for_change
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     while idl_.change_seqno == seqno and not idl_.run():
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/db/idl.py", line 433, in run
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     self._session.run()
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/jsonrpc.py", line 519, in run
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     error = self.stream.connect()
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 817, in connect
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     retval = super(SSLStream, self).connect()
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 300, in connect
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     self.__scs_connecting()
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 268, in __scs_connecting
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     retval = self.check_connection_completion(self.socket)
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 777, in check_connection_completion
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     return Stream.check_connection_completion(sock)
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 137, in check_connection_completion
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     return ovs.socket_util.check_connection_completion(sock)
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/socket_util.py", line 181, in check_connection_completion
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     sock.send("\0".encode(), socket.MSG_DONTWAIT)
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/eventlet/green/ssl.py", line 194, in send
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     return self._call_trampolining(
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/eventlet/green/ssl.py", line 158, in _call_trampolining
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     return func(*a, **kw)
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn   File "/usr/lib/python3.10/ssl.py", line 1232, in send
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     raise ValueError(
+ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>
+```
+### Solution:
+Restarting the whole infrastructure seems to solve the problem and ovn metadata agent is appearing on all the compute hosts when issuing `openstack network agent list`
+---
 
 ### Error:
 
