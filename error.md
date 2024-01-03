@@ -37,6 +37,7 @@ ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn     raise V
 ERROR neutron.plugins.ml2.drivers.ovn.mech_driver.ovsdb.impl_idl_ovn ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>
 ```
 ### Solution:
+
 Restarting the whole infrastructure seems to solve the problem and ovn metadata agent is appearing on all the compute hosts when issuing `openstack network agent list`
 ---
 
