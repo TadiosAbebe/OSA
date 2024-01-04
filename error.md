@@ -3,6 +3,15 @@
 ---
 ### Error:
 
+When enabling haproxy stat with the following config inside user_variable.yml, haproxy-install.yml playbook fails on `TASK [haproxy_server : Drop base haproxy config]` with the error message "msg": "AnsibleUndefinedVariable: 'vip_interface' is undefined", on osa 2023.1, 
+
+### Solution:
+
+The bug has been patched here https://opendev.org/openstack/openstack-ansible-haproxy_server/commit/df2e7af9b3161eeca61b8695fa97e22c5683ec34 and can be manually port to our version by editing the file inside /etc/ansible/roles/haproxy_server/templates/haproxy.cfg.j2 and replacing it with a proper working template that doesnt require vip_interface
+
+---
+### Error:
+
 `openstack-ansible galera-install.yml` command failing on `Fail if upgrade is needed` task leading to being unable to update galera cluster with an error message Got error: 1102 Incorrect database name tmp.xxx 
 
 ### Solution:
