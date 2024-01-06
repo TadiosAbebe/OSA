@@ -1,6 +1,19 @@
 # Errors and Solutions
 
 ---
+### Error:
+
+`openstack-ansible galera-install.yml` command failing on `Fail if upgrade is needed` task leading to being unable to update galera cluster with an error message Got error: 1102 Incorrect database name tmp.xxx 
+
+### Solution:
+
+Going into the galera container that is failing to upgrade and navigating to /var/lib/mysql and then deleting databases/folder with the name specified on the error output seems to fix the problem
+
+```bash
+rm -r tmp.xxx
+```
+
+---
 
 ### Error:
 
