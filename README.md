@@ -1,17 +1,18 @@
 # Openstack Internal Documentation
-- [Creatting a ceph cluster](#Creating-a-ceph-cluster)
-  - [Preparing ceph for openstack deployment](##Preparing-ceph-for-openstack-deployment)
+- [Creating a ceph cluster](#Creating-a-ceph-cluster)
+  - [Preparing ceph for openstack deployment](#Preparing-ceph-for-openstack-deployment)
 - [Deploying openstack with ceph](#Deploying-openstack-with-ceph)
-  - [Preparing the deployment host](##Preparing-the-deployment-host)
-  - [Preparing the target host](##Preparing-the-target-host)
-  - [Running openstack-ansible deployment scripts](##Running-openstack-ansible-deployment-scripts)
-  - [Verifying the openstack cloud](##Verifying-the-openstack-cloud)
+  - [Preparing the deployment host](#Preparing-the-deployment-host)
+  - [Preparing the target host](#Preparing-the-target-host)
+  - [Running openstack-ansible deployment scripts](#Running-openstack-ansible-deployment-scripts)
+  - [Verifying the openstack cloud](#Verifying-the-openstack-cloud)
 - [Openstack post installation configurations](#Openstack-post-installation-configurations)
 - [Testing the openstack using rally](#Testing-the-openstack-using-rally)
 - [Appendix](#Appendix)
   - [Temporary netplan file](##Temporary-netplan-file)
-  - [Installing monitoring packages](##Installing-monitoring-packages)
-  - [Installing management packages](##Installing-management-packages)
+  - [Installing monitoring packages](#Installing-monitoring-packages)
+  - [Installing management packages](#Installing-management-packages)
+  - [Taking snapshot using timeshift](#Taking-snapshot-using-timeshift)
 
 Before preceding with deployment of openstack, we need to setup an external ceph cluster that we later on connect with our openstack deployment
 
@@ -23,6 +24,17 @@ Before preceding with deployment of openstack, we need to setup an external ceph
 ```bash
 vgremove -f ceph-...
 pvremove -ff /dev/sdx
+```
+- Or you can use the following bash script to do the clean up
+```bash
+for vg in $(sudo vgs --noheadings -o vg_name | grep -v "ubuntu-vg"); do
+	echo "Deleting VG $vg..."
+	sudo vgremove -f $vg
+done
+for pv in $(sudo pvs --noheadings -o pv_name,vg_name | grep -v "ubuntu-vg" | awk '{print $1}'); do
+	echo "Deleting PV $pv..."
+      sudo pvremove -ff $pv
+done
 ```
 - Start by configuring the network on the host with the following network configuration file. and don't forget to change
     - the interface names under ethernets i.e. interface0, interface1, interface2, interface3
@@ -127,9 +139,9 @@ systemctl restart cloud-init
 sudo apt update && sudo apt upgrade -y
 ```
 
-> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](##Installing-monitoring-packages)
+> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](#Installing-monitoring-packages)
 
-> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](##Installing-management-packages)
+> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](#Installing-management-packages)
 
 - Set the ceph version for your deployment using the following command
 ```bash
@@ -159,7 +171,7 @@ cephadm bootstrap --mon-ip 172.2x.244.x --initial-dashboard-user "admin" --initi
 >> - Copy the ssh keys from /etc/ceph/ceph.pub on this bootstrap node to the rest of the cluster node of /root/.ssh/authorized_key
 - Install the ceph-common package
 ```bash
-apt install ceph-common
+apt install ceph-common -y
 ```
 > The below steps will only be performed on the bootstrap node and not on the other nodes, skip this for all nodes except the bootstrap node
 >> - Go into the cephadm shell with `cephadm shell` if you don't have the ceph-common package installed
@@ -215,7 +227,7 @@ ceph auth get-or-create client.cinder-backup mon 'profile rbd' osd 'profile rbd 
 
 - The below steps assume that you have already installed operating system on the hosts and it is tested on ubuntu server 22.04
 - The deployment host is the host which we will be using as our ansible controller, and install all ansible and openstack ansible related packages
-- We will start by configuring the network, for configuring temporary network configuration you can refer the following netplan [Temporary netplan file](##Temporary-netplan-file)
+- We will start by configuring the network, for configuring temporary network configuration you can refer the following netplan [Temporary netplan file](#Temporary-netplan-file)
 ```yaml
 network:
   ethernets:
@@ -302,9 +314,9 @@ sudo apt update && sudo apt upgrade -y
 sudo reboot now
 ```
 
-> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](##Installing-monitoring-packages)
+> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](#Installing-monitoring-packages)
 
-> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](##Installing-management-packages)
+> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](#Installing-management-packages)
 
 - Update the hosts file with the openstack cluster hosts ip and name, you can find the list inside [etc/openstack_deploy/custom_vars.md]()
 ```bash
@@ -341,12 +353,10 @@ cd /opt/openstack-ansible
 cp -r /opt/openstack-ansible/etc/openstack_deploy /etc/openstack_deploy
 cd ~
 git clone https://github.com/TadiosAbebe/OSA.git
-cd OSA
-git checkout xxx
 ```
 ```bash
-cp etc/openstack_deploy/user_variables.yml /etc/openstack_deploy
-cp etc/openstack_deploy/openstack_user_config.yml /etc/openstack_deploy
+cp /root/OSA/etc/openstack_deploy/user_variables.yml /etc/openstack_deploy
+cp /root/OSA/etc/openstack_deploy/openstack_user_config.yml /etc/openstack_deploy
 ```
 - Edit the contents of /etc/openstack_deploy/openstack_user_config.yml and replace with variables that reside under etc/openstack_deploy/custom_vars.yml
 - Edit the ceph_mons: variable inside /etc/openstack_deploy/user_variables to reflect your current environment
@@ -455,9 +465,9 @@ systemctl restart cloud-init
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
-> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](##Installing-monitoring-packages)
+> Optional: Monitoring packages could be installed and setup if you want to monitor this server with zabbix, refer to the appendix section on how to install and setup zabbix monitoring [Installing monitoring packages](#Installing-monitoring-packages)
 
-> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](##Installing-management-packages)
+> Optional: Management packages could be installed and configured if you want to manage this server with cockpit, refer to the appendix section on how to install and setup cockpit [Installing management packages](#Installing-management-packages)
 
 > At this point it is a good idea to go to the deployment node's cockpit interface and add the rest of the node inside cockpit for easier management
 
@@ -655,8 +665,9 @@ openstack security group rule create --ingress --ethertype IPv4 --protocol tcp -
 Openstack cloud can be tested from deployment node by install rally
 - Install rally using pip, you may need to install pip if it is not installed on your system first
 ```bash
-sudo apt install python3-pip
+sudo apt install python3-pip -y
 pip install rally-openstack
+pip install fixtures
 ```
 - The you need to create rally database before running any test, this will create sqlite db to store the test result of the tests
 ```bash
@@ -682,12 +693,12 @@ git clone https://github.com/openstack/rally-openstack.git
 - Copy the test cases to a suitable location
 ```bash
 mkdir rally-tests
-cp rally-openstack/samples/tasks/scenarios/* rally-tests
+cp -r rally-openstack/samples/tasks/scenarios/* rally-tests
 ```
 - Verify, edit and run task
 ```bash
 nano rally-tests/nova/boot-and-delete.yaml
-rally task start rally-tasts/nova/boot-and-delete.yaml
+rally task start rally-tests/nova/boot-and-delete.yaml
 ```
 - When editing a rally task, either to change the flavor , image ..., you can use the openstack cli right from the deployment node since it will be install with rally and you already have access to the openstack cloud with the sourcing of the openrc file
 - Once the task run is completed you can export html report using the following command
@@ -757,3 +768,13 @@ nano /etc/cockpit/disallowed-users
 ```bash
 systemctl restart cockpit
 ```
+## Taking snapshot using timeshift
+- Download, and install timeshift package
+```bash
+sudo apt install timeshift -y
+```
+- Run the following command to take snapshot, dont foget to replace the block device with respect to you environment
+```bash
+sudo timeshift --create --comment "comment" --snapshot-device /dev/sdx
+```
+[Go up](#openstack-internal-documentation)

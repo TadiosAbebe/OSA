@@ -25,9 +25,4 @@ $ git config --system --unset credential.helper
 
 # The Workflow
 
-- Update the scripts on local machine
-- Commit and push changes
-- Clone the repo on deployment machine
-- Pull changes from remote repo
-- Make chnages and commit
-- Push to remote
+Test new features and configurations on the test virtual environment, once we see fit publish those configurations to the staging branch, pull configurations from the staging branch and deploy them on the staging environment, once feature and configurations are tested and benchmarked on the staging environment merge the staging branch to the master and repeat this cycle
