@@ -727,19 +727,16 @@ network:
 - Download and install zabbix monitoring packages
 ```bash
 wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
-```
-```bash
 dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
-```
-```bash
 apt update
-```
-```bash
 apt install zabbix-agent2 zabbix-agent2-plugin-*
 ```
-- Edit the zabbix agent configuration file to point it to the monitoring server ip, and also set the hostname variable
+- Edit the zabbix agent configuration file to point it to the monitoring server ip, and also set the hostname variable dont forget to replace the xx on the Hostname
 ```bash
-nano /etc/zabbix/zabbix_agent2.conf
+sed -i 's/^Server=.*/Server=10.123.13.186/' /etc/zabbix/zabbix_agent2.conf
+```
+```bash
+sed -i 's/^Hostname=.*$/Hostname=node00/' /etc/zabbix/zabbix_agent2.conf
 ```
 - Enable and start the service
 ```bash
