@@ -736,7 +736,7 @@ apt install zabbix-agent2 zabbix-agent2-plugin-*
 sed -i 's/^Server=.*/Server=10.123.13.186/' /etc/zabbix/zabbix_agent2.conf
 ```
 ```bash
-sed -i 's/^Hostname=.*$/Hostname=node00/' /etc/zabbix/zabbix_agent2.conf
+sed -i 's/^Hostname=.*$/Hostname=nodexx/' /etc/zabbix/zabbix_agent2.conf
 ```
 - Enable and start the service
 ```bash
@@ -753,7 +753,7 @@ systemctl start cockpit
 ```
 - Edit the cockpit configuration file to allow root login, and comment out the root line
 ```bash
-nano /etc/cockpit/disallowed-users
+sed -i '/^root/s/^/#/' /etc/cockpit/disallowed-users
 ```
 - restart cockpit service
 ```bash
