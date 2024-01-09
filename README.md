@@ -348,7 +348,7 @@ cd /opt/openstack-ansible
 ```
 - Configure openstack-ansible, don't forget to replace the xxx on the git check out line to the suitable branch(staging, master)
 ```bash
-cp -r /opt/openstack-ansible/etc/openstack_deploy /etc/openstack_deploy
+cp -r /opt/openstack-ansible/etc/openstack_deploy /etc
 cd ~
 git clone https://github.com/TadiosAbebe/OSA.git
 ```
