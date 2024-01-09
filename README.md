@@ -129,10 +129,8 @@ sudo netplan apply
   - change preserve_hostname to true
   - comment update_hostname and update_etc_hosts
 ```bash
-nano /etc/cloud/cloud.cfg
-```
-```bash
-systemctl restart cloud-init
+sed -i 's/^preserve_hostname.*/preserve_hostname = false/' /etc/cloud/cloud.cfg
+sed -i -e '/^ *- update_hostname/s/^/#/' -e '/^ *- update_etc_hosts/s/^/#/' /etc/cloud/cloud.cfg
 ```
 - Update and upgrade your system
 ```bash
