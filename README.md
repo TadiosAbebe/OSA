@@ -341,8 +341,10 @@ tmux
 ```
 ```bash
 git clone -b xxx https://github.com/openstack/openstack-ansible.git /opt/openstack-ansible
+```
+```bash
 cd /opt/openstack-ansible
-./scripts/bootstrap-ansible.sh
+./scripts/bootstrap-ansible.sh > /var/log/bootstrap-ansible.log
 ```
 - Configure openstack-ansible, don't forget to replace the xxx on the git check out line to the suitable branch(staging, master)
 ```bash
