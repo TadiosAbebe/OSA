@@ -486,7 +486,7 @@ nano /root/.ssh/authorized_keys
 - Install additional packages as per the openstack-ansible deployment
 > Refer to the official documentation to get up to dated packages list to install for the openstack version you are deploying
 ```bash
-apt install bridge-utils debootstrap openssh-server tcpdump vlan python3 openvswitch-switch -y && apt install linux-modules-extra-$(uname -r) -y
+apt install bridge-utils debootstrap openssh-server tcpdump vlan python3 -y && apt install linux-modules-extra-$(uname -r) -y
 ```
 
 ## Running openstack-ansible deployment scripts
