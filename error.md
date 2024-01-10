@@ -2,6 +2,49 @@
 
 ---
 ### Error:
+During fresh deployment after the playbook os-neutron-install.yml, the cpu on the infra nodes spike spike up and i have "ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>" error on my neutron-server service 
+```bash
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection [-] non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>: ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection Traceback (most recent call last):
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovsdbapp/backend/ovs_idl/connection.py", line 107, in run
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     self.idl.run()
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/db/idl.py", line 433, in run
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     self._session.run()
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/jsonrpc.py", line 519, in run
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     error = self.stream.connect()
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 817, in connect
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     retval = super(SSLStream, self).connect()
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 300, in connect
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     self.__scs_connecting()
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 268, in __scs_connecting
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     retval = self.check_connection_completion(self.socket)
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 777, in check_connection_completion
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     return Stream.check_connection_completion(sock)
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/stream.py", line 137, in check_connection_completion
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     return ovs.socket_util.check_connection_completion(sock)
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/ovs/socket_util.py", line 181, in check_connection_completion
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     sock.send("\0".encode(), socket.MSG_DONTWAIT)
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/eventlet/green/ssl.py", line 194, in send
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     return self._call_trampolining(
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/openstack/venvs/neutron-27.3.0/lib/python3.10/site-packages/eventlet/green/ssl.py", line 158, in _call_trampolining
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     return func(*a, **kw)
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection   File "/usr/lib/python3.10/ssl.py", line 1232, in send
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection     raise ValueError(
+2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket', 
+```
+
+### Solution
+
+This error is somehow related to this https://bugs.launchpad.net/openstack-ansible/+bug/2027854 bug and also related to the OVS bug itself, and has been fixed in 2.17.3, the root cause of facing this issue on 2023.1 is that upper constraints were not updated so inside neutron venv old ovs python package is installed, there isn't really good way to work around this, except forking the repo and editing the version of ovs
+so the upper constrant with this issue is https://opendev.org/openstack/requirements/src/branch/stable/2023.1/upper-constraints.txt#L185, so fork the openstack/requirements repo on github, patch it as needed then override the folloing parameters here https://opendev.org/openstack/openstack-ansible/src/branch/master/inventory/group_vars/all/source_git.yml#L19-L20 
+
+- but i have also managed to resolve this issue by easly restarting the neutron-server like this
+```bash
+ansible neutron_server -m shell -a "systemctl restart neutron-server"
+```
+
+---
+### Error:
 
 `openstack-ansible galera-install.yml` command failing on `Fail if upgrade is needed` task leading to being unable to update galera cluster with an error message Got error: 1102 Incorrect database name tmp.xxx 
 
