@@ -2,6 +2,25 @@
 
 ---
 ### Error:
+Trying to live migrate a vm, will fail with the following error
+```bash
+Error: Failed to live migrate instance to host "node31". Details Migration pre-check error: Unacceptable CPU info: CPU doesn't have compatibility. 0 Refer to http://libvirt.org/html/libvirt-libvirt-host.html#virCPUCompareResult (HTTP 400) (Request-ID: req-8453537a-3d45-4103-8f0e-0f0026206e2f)
+```
+And also rally test fail with the error: No valid host was found. There are not enough hosts available. (HTTP 400) (Request-ID: req-c3841274-9ed7-4569-8835-1f2a4a69ca1c)
+
+### Solution:
+
+Add the following at the end of the /etc/nova/nova.conf file on all compute host and nova infra containers
+```yaml
+[workarounds]
+skip_cpu_compare_on_dest = True
+```
+restart the nova-compute service on the comptue hosts and stop and start the nova container on the infrastructure hosts
+
+ref: https://bugs.launchpad.net/nova/+bug/2023035
+
+---
+### Error:
 During fresh deployment after the playbook os-neutron-install.yml, the cpu on the infra nodes spike spike up and i have "ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>" error on my neutron-server service 
 ```bash
 2024-01-10 13:37:31.122 3098 ERROR ovsdbapp.backend.ovs_idl.connection [-] non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>: ValueError: non-zero flags not allowed in calls to send() on <class 'eventlet.green.ssl.GreenSSLSocket'>
